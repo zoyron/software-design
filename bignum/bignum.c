@@ -32,8 +32,31 @@ void bignum_free(BigNum* n){
   n->size = 0;
 }
 
+// Compare 2 BigNums
+int bignum_compare(const BigNum* a, const BigNum* b){
+  if(a->size != b->size){
+    return a->size > b->size ? 1 : -1;
+  }
+  for(int i = a->size - 1; i>= 0; i--){
+    return a->digits[i] > b->digits[i] ? 1 : -1;
+  }
+
+  return 0;
+}
+
 int main(){
-  BigNum a;
+  BigNum a, b;
   bignum_init(&a, "12345678901234567890");
+  bignum_init(&b, "28289292982823101089");
+  int cmp = bignum_compare(&a, &b);
+  if(cmp > 0){
+    printf("a is bigger than b\n");
+  }
+  else if(cmp < 0){
+    printf("b is bigger than a\n");
+  }
+  else{
+    printf("both are equal\n");
+  }
   return 0;
 }
