@@ -44,8 +44,30 @@ int bignum_compare(const BigNum* a, const BigNum* b){
   return 0;
 }
 
+// Add 2 bignums
+void bignum_add(BigNum* result,const BigNum* a,const BigNum* b){
+  int  max_size = a->size > b->size ? a->size : b->size;
+  result->digits = malloc((max_size + 1)*sizeof(char));
+  int carry = 0, i;
+  for(i = 0; i < max_size || carry; i++){
+    int sum = carry + (i < a->size ? a->digits[i] : 0) + (i < b->size ? b->digits[i] : 0);
+    result->digits[i] = sum % 10;
+    carry = sum / 10;
+  }
+  result->size = i;
+}
+
+// Print the bignum
+void bignum_print(BigNum *n) {
+    printf("BigNum: ");
+    for (int i = n->size - 1; i >= 0; i--) {
+        printf("%d", n->digits[i]);
+    }
+    printf("\n");
+}
+
 int main(){
-  BigNum a, b;
+  BigNum a, b, sum;
   bignum_init(&a, "12345678901234567890");
   bignum_init(&b, "28289292982823101089");
   int cmp = bignum_compare(&a, &b);
@@ -58,5 +80,11 @@ int main(){
   else{
     printf("both are equal\n");
   }
+
+  bignum_add(&sum, &a, &b);
+  bignum_print(&sum);
+  bignum_free(&a);
+  bignum_free(&b);
+  bignum_free(&sum);
   return 0;
 }
